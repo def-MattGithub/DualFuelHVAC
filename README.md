@@ -27,6 +27,8 @@ Required Data Inputs:
    -AFUE : Efficcency of your furnace.  Check the label on your furnace to find this.  This is usually 80 for modern cheap systems or it could be as high as 98.  It's a percentage of how much fuel energy can be converted to heat in your house.
   
    -Data Points : Many heat pumps only publish two data points consisting of 1. Outdoor Temperature      and 2. COP of the heat pump at that tempature.
+   
+   Ex: Carrier Comfort 14 has a COP of 3.62 at 45F and COP of 2.44 at 17F.  You can use these numbers if unsure.
   
    -DataHi : (Higher Temperature, COP at that temperature)  
   
