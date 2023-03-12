@@ -9,7 +9,6 @@ CostPerTherm = 2.21
 ElecTier1 = .34
 ElecTier2 = .43
 CurrentElecTier = ElecTier2  # leave None to average, or input ElecTier1 or ElecTier2
-
 # setup variables
 AFUE = 80
 DataHi = (45, 3.62)
@@ -29,10 +28,10 @@ def ElectricTier():
 
 # calculated COP of heat pump at current temp (mostly made by Bing chat)
 def FindCOP(outtemp, data1, data2):
-    if outtemp == 45:
-        return 3.62
-    elif outtemp == 17:
-        return 2.44
+    if outtemp == DataHi[0]:
+        return DataHi[1]
+    elif outtemp == DataLo[0]:
+        return DataLo[1]
     else:
         estimated = True
     # Create data frame
