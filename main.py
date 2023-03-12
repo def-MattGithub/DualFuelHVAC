@@ -16,6 +16,8 @@ CurrentElecTier = ElecTier2  # leave None to average, or input ElecTier1 or Elec
 AFUE = 80
 DataHi = (45, 3.62)
 DataLo = (17, 2.44)
+
+
 """---End Global Variables---"""
 
 
