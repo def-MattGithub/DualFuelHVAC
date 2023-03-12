@@ -34,6 +34,7 @@ def FindCOP(outtemp, data1, data2):
         return DataLo[1]
     else:
         estimated = True
+   
     # Create data frame
     df = pd.DataFrame({'Temp': [DataHi[0], DataLo[0]],
                        'COP': [DataHi[1], DataLo[1]]})
