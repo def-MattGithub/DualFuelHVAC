@@ -39,18 +39,12 @@ def FindCOP(outtemp, data1, data2):
     else:
         estimated = True
     # Create data frame
-    df = pd.DataFrame({"Temp": [DataHi[0], DataLo[0]],
-                       "COP": [DataHi[1], DataLo[1]]})
-
-    """"# Plot data points
-    plt.scatter(df["Temp"], df["COP"])
-    plt.xlabel("Outdoor Temperature (F)")
-    plt.ylabel("COP")
-    #plt.show()"""
+    df = pd.DataFrame({'Temp': [DataHi[0], DataLo[0]],
+                       'COP': [DataHi[1], DataLo[1]]})
 
     # Fit linear regression model
     model = LinearRegression()
-    model.fit(df[["Temp"]], df["COP"])
+    model.fit(df[['Temp']], df['COP'])
 
     # Get slope and intercept coefficients
     m = model.coef_[0]
