@@ -34,8 +34,12 @@ Required Data Inputs:
 
 
 Ultimate goal is to integrate this into my Home Assistant and:
+
 -Pull rates from utility provider API (PG&E requires an x509 cert from a public CA which I don't want to pay for, so I enter rates manually now)
+
 -Pull current outdoor temperature from local sensor in Home Assistant
+
 -Run the calculation either before each call for heat (for people with volatile rates), or likely a daily cron job for PG&E
+
 -Set thermostat to use the cheapest heat source.  This may have to be manually done with Ecobee
 
