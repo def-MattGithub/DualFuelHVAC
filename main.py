@@ -1,17 +1,13 @@
-# import numpy
-# import matplotlib.pyplot as plt
-
 
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
-
 """---Start Global Variables---"""
 # commonly changed variables
-OutdoorTemp = 40  # Farenheight
-CostPerTherm = 2.68
-ElecTier1 = .33
-ElecTier2 = .40
+OutdoorTemp = 50  # Farenheight
+CostPerTherm = 2.21
+ElecTier1 = .34
+ElecTier2 = .43
 CurrentElecTier = ElecTier2  # leave None to average, or input ElecTier1 or ElecTier2
 
 # setup variables
@@ -21,6 +17,7 @@ DataLo = (17, 2.44)
 """---End Global Variables---"""
 
 
+# for multi-tier or TOD electric rates
 def ElectricTier():
     if CurrentElecTier is None:
         costperkwh = (ElecTier1 + ElecTier2) / 2.0
@@ -30,7 +27,7 @@ def ElectricTier():
     return costperkwh
 
 
-# function mostly made by Bing Chat
+# calculated COP of heat pump at current temp (mostly made by Bing chat)
 def FindCOP(outtemp, data1, data2):
     if outtemp == 45:
         return 3.62
@@ -47,29 +44,30 @@ def FindCOP(outtemp, data1, data2):
     model.fit(df[['Temp']], df['COP'])
 
     # Get slope and intercept coefficients
-    m = model.coef_[0]
-    b = model.intercept_
+    modelCoef = model.coef_[0] #m
+    modelIncpt = model.intercept_ #b
 
     # Calculate COP for any outdoor temperature x
-    x = float(outtemp)
-    y = m * x + b
+    outFloat = float(outtemp) #x
+    calc = modelCoef * outFloat + modelIncpt
 
-    print(f'The COP of your heat pump at {x} F is {y:.2f}')
+    print(f'The COP of your heat pump at {outFloat} F is {calc:.2f}')
     if estimated == True:
         print('the COP was estimated')
-    return y
+    return calc
 
-
-# takes energy costs and efficency of furnace/pump
-# and decides what fuel to use at a given moment
-def PumpOrBurn(costtherm, costelec, cop, afue):
-    # validate input, convert AFUE value to percentage
-    if 80 <= afue <= 98:
+# formats AFUE to use in calculation
+def AFUEloss(afue):
+    if 70 <= afue <= 98:
         afueloss = (1 - (afue * 0.01)) + 1
+        return afueloss
     else:
-        print('AFUE must be between 80 and 98.  entry of:', afue, ' is not valid')
+        print('AFUE must be between 70 and 98.  entry of:', afue, ' is not valid')
         exit(0)
 
+"""takes energy costs and efficency of furnace/pump
+and decides what fuel to use at a given moment"""
+def PumpOrBurn(costtherm, costelec, cop, afueloss):
     # converts therm to killowat hours equivilant
     ThermtokWH = (costtherm / 29.3)
     WithLoss = (ThermtokWH * afueloss)
@@ -95,6 +93,7 @@ def PumpOrBurn(costtherm, costelec, cop, afue):
 
 
 CostPerKWH = ElectricTier()
+AFUECalc = AFUEloss(AFUE)
 COP = (FindCOP(OutdoorTemp, DataHi, DataLo))
-Output = PumpOrBurn(CostPerTherm, CostPerKWH, COP, AFUE)
+Output = PumpOrBurn(CostPerTherm, CostPerKWH, COP, AFUECalc)
 print(Output)
