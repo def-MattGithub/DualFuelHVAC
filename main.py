@@ -48,11 +48,11 @@ def FindCOP(outtemp, data1, data2):
         model.fit(df[['Temp']], df['COP'])
 
         # Get slope and intercept coefficients
-        modelCoef = model.coef_[0] #m
-        modelIncpt = model.intercept_ #b
+        modelCoef = model.coef_[0]
+        modelIncpt = model.intercept_
 
-        # Calculate COP for any outdoor temperature x
-        outFloat = float(outtemp) #x
+        # Calculate COP for any outdoor temperature
+        outFloat = float(outtemp)
         calc = modelCoef * outFloat + modelIncpt
     
         print(f'Estimated COP at {outFloat} F is {calc:.2f}')
