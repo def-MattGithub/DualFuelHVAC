@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 
 """---Start Global Variables---"""
 # commonly changed variables
-OutdoorTemp = 50  # Farenheight
+OutdoorTemp = 30  # Farenheight
 CostPerTherm = 2.21
 ElecTier1 = .34
 ElecTier2 = .43
@@ -28,33 +28,31 @@ def ElectricTier():
 
 # calculated COP of heat pump at current temp (mostly made by Bing chat)
 def FindCOP(outtemp, data1, data2):
-    if outtemp == DataHi[0]:
-        return DataHi[1]
+    if outtemp == data1[0]:
+        print(f'COP at ', data1[0], 'is', data1[1])
+        return data1[1]
     elif outtemp == DataLo[0]:
-        return DataLo[1]
+        print(f'COP at ', data2[0], 'is', data2[1])
+        return data2[1]
     else:
-        estimated = True
-   
-    # Create data frame
-    df = pd.DataFrame({'Temp': [DataHi[0], DataLo[0]],
-                       'COP': [DataHi[1], DataLo[1]]})
+        # Create data frame
+        df = pd.DataFrame({'Temp': [DataHi[0], DataLo[0]],
+                        'COP': [DataHi[1], DataLo[1]]})
 
-    # Fit linear regression model
-    model = LinearRegression()
-    model.fit(df[['Temp']], df['COP'])
+        # Fit linear regression model
+        model = LinearRegression()
+        model.fit(df[['Temp']], df['COP'])
 
-    # Get slope and intercept coefficients
-    modelCoef = model.coef_[0] #m
-    modelIncpt = model.intercept_ #b
+        # Get slope and intercept coefficients
+        modelCoef = model.coef_[0] #m
+        modelIncpt = model.intercept_ #b
 
-    # Calculate COP for any outdoor temperature x
-    outFloat = float(outtemp) #x
-    calc = modelCoef * outFloat + modelIncpt
-
-    print(f'The COP of your heat pump at {outFloat} F is {calc:.2f}')
-    if estimated == True:
-        print('the COP was estimated')
-    return calc
+        # Calculate COP for any outdoor temperature x
+        outFloat = float(outtemp) #x
+        calc = modelCoef * outFloat + modelIncpt
+    
+        print(f'Estimated COP at {outFloat} F is {calc:.2f}')
+        return calc
 
 # formats AFUE to use in calculation
 def AFUEloss(afue):
@@ -71,8 +69,8 @@ def PumpOrBurn(costtherm, costelec, cop, afueloss):
     # converts therm to killowat hours equivilant
     ThermtokWH = (costtherm / 29.3)
     WithLoss = (ThermtokWH * afueloss)
-    print('Therm to kWh is: ', ThermtokWH, 'at 100% eff')
-    print('with loss:', WithLoss)
+    print('Therm to kWh is: ', ThermtokWH, 'with no loss')
+    print('Therm to kWh is: ', WithLoss, 'with', AFUE)
     ElectricEquiv = (WithLoss * cop)
     print('Electric Equivilant in kWh is: ', ElectricEquiv)
 
