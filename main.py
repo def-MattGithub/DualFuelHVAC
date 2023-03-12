@@ -3,12 +3,15 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 """---Start Global Variables---"""
+
+
 # commonly changed variables
 OutdoorTemp = 30  # Farenheight
 CostPerTherm = 2.21
 ElecTier1 = .34
 ElecTier2 = .43
 CurrentElecTier = ElecTier2  # leave None to average, or input ElecTier1 or ElecTier2
+
 # setup variables
 AFUE = 80
 DataHi = (45, 3.62)
@@ -26,7 +29,8 @@ def ElectricTier():
     return costperkwh
 
 
-# calculated COP of heat pump at current temp (mostly made by Bing chat)
+# calculated COP of heat pump at current temp
+# possible todo: run this once and create a dict to speed up subsequent runs
 def FindCOP(outtemp, data1, data2):
     if outtemp == data1[0]:
         print(f'COP at ', data1[0], 'is', data1[1])
@@ -54,6 +58,7 @@ def FindCOP(outtemp, data1, data2):
         print(f'Estimated COP at {outFloat} F is {calc:.2f}')
         return calc
 
+
 # formats AFUE to use in calculation
 def AFUEloss(afue):
     if 70 <= afue <= 98:
@@ -63,8 +68,10 @@ def AFUEloss(afue):
         print('AFUE must be between 70 and 98.  entry of:', afue, ' is not valid')
         exit(0)
 
+        
 """takes energy costs and efficency of furnace/pump
 and decides what fuel to use at a given moment"""
+
 def PumpOrBurn(costtherm, costelec, cop, afueloss):
     # converts therm to killowat hours equivilant
     ThermtokWH = (costtherm / 29.3)
@@ -90,6 +97,7 @@ def PumpOrBurn(costtherm, costelec, cop, afueloss):
         exit(1)
 
 
+# call the functions
 CostPerKWH = ElectricTier()
 AFUECalc = AFUEloss(AFUE)
 COP = (FindCOP(OutdoorTemp, DataHi, DataLo))
